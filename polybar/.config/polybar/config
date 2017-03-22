@@ -1,0 +1,454 @@
+;=====================================================
+;
+;   To learn more about how to configure Polybar
+;   go to https://github.com/jaagr/polybar
+;
+;   The README contains alot of information
+;
+;=====================================================
+
+[colors]
+background = ${xrdb:color0}
+background-alt = ${xrdb:color8}
+foreground = #dfdfdf
+foreground-alt = #55
+primary = #ffb52a
+secondary = #e60053
+alert = #bd2c40
+
+[global/wm]
+margin-top = 5
+margin-bottom = 5
+
+[bar/bar1]
+;monitor = ${env:MONITOR:HDMI-1}
+width = 100%
+height = 40
+offset-x = 0
+offset-y = 0
+
+;background = ${xrdb:color8}
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+overline-size = 2
+overline-color = #f00
+underline-size = 2
+underline-color = #00f
+
+border-bottom-size = 2
+border-bottom-color = ${colors.background-alt}
+
+padding-left = 0
+padding-right = 2
+module-margin-left = 1
+module-margin-right = 2 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Fonts
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+font-0 = Monaco:size=12;-7
+; used to get cool icons
+font-1 = FontAwesome:size=15;-7
+; this is used for the clock in the middle
+font-2 = Monaco:size=20;-3
+font-3 = siji:pixelsize=10
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Module positions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+modules-left = i3 xwindow
+modules-center = date1
+modules-right = xbacklight volume battery date2 powermenu
+;modules-right = xbacklight volume xkeyboard memory cpu wlan eth battery temperature date2 powermenu
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Icon tray
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+tray-position = left
+tray-padding = 5 
+;tray-transparent = true
+;tray-background = #0063ff
+
+;wm-restack = bspwm
+;wm-restack = i3
+
+;override-redirect = true
+
+;scroll-up = bspwm-desknext
+;scroll-down = bspwm-deskprev
+
+;scroll-up = i3wm-wsnext
+;scroll-down = i3wm-wsprev
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; xwindow
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[module/xwindow]
+type = internal/xwindow
+label = %title:0:30:...%
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Keyboard (language)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[module/xkeyboard]
+type = internal/xkeyboard
+blacklist-0 = num lock
+label-layout = %{F#55}%{F-} %layout%
+label-layout-underline = ${colors.secondary}
+label-indicator-padding = 2
+label-indicator-margin = 1
+label-indicator-background = ${colors.secondary}
+label-indicator-underline = ${colors.secondary} 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; filesystem
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[module/filesystem]
+type = internal/fs
+interval = 25
+
+mount-0 = /
+mount-1 = /home
+mount-2 = /invalid/mountpoint
+
+label-mounted = %mountpoint%: %percentage_free%%
+
+label-unmounted = %mountpoint%: not mounted
+label-unmounted-foreground = ${colors.foreground-alt}
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; bspwm
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[module/bspwm]
+type = internal/bspwm
+
+label-focused = %index%
+label-focused-background = ${colors.background-alt}
+label-focused-underline= ${colors.primary}
+label-focused-padding = 2
+
+label-occupied = %index%
+label-occupied-padding = 2
+
+label-urgent = %index%!
+label-urgent-background = ${colors.alert}
+label-urgent-padding = 2
+
+label-empty = %index%
+label-empty-foreground = ${colors.foreground-alt}
+label-empty-padding = 2
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; i3
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[module/i3]
+type = internal/i3
+format = <label-state> <label-mode>
+index-sort = true
+wrapping-scroll = false
+
+label-mode-padding = 2
+label-mode-foreground = #000
+label-mode-background = ${colors.primary}
+
+; changed from %label% to %name% so it supports the python hack
+label-focused = %name%
+label-focused-background = ${module/bspwm.label-focused-background}
+;label-focused-underline = ${module/bspwm.label-focused-underline}
+label-focused-padding = ${module/bspwm.label-focused-padding}
+
+label-unfocused = %name%
+label-unfocused-padding = ${module/bspwm.label-occupied-padding}
+
+label-urgent = %name%!
+label-urgent-background = ${module/bspwm.label-urgent-background}
+label-urgent-padding = ${module/bspwm.label-urgent-padding}
+
+label-visible = %name%
+label-visible-background = ${self.label-focused-background}
+;label-visible-underline = ${self.label-focused-underline}
+label-visible-padding = ${self.label-focused-padding}
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; mpd
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[module/mpd]
+type = internal/mpd
+
+format-online = <label-song>  <icon-prev> <icon-seekb> <icon-stop> <toggle> <icon-seekf> <icon-next>  <icon-repeat> <icon-random>
+
+label-song-maxlen = 25
+label-song-ellipsis = true
+
+icon-prev = 
+icon-seekb = 
+icon-stop = 
+icon-play = 
+icon-pause = 
+icon-next = 
+icon-seekf = 
+
+icon-random = 
+icon-repeat = 
+
+toggle-on-foreground = ${colors.primary}
+toggle-off-foreground = #66
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Window Brightness
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[module/xbacklight]
+type = internal/xbacklight
+
+;format = <label> <bar>
+format = <ramp> <label>
+;label = 
+
+ramp-0 = 
+
+;bar-width = 10
+;bar-indicator = │
+;bar-indicator-foreground = #ff
+;bar-indicator-font = 2
+;bar-fill = ─
+;bar-fill-font = 2
+;bar-fill-foreground = #9f78e1
+;bar-empty = ─
+;bar-empty-font = 2
+;bar-empty-foreground = ${colors.foreground-alt}
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; backlight-acpi
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[module/backlight-acpi]
+inherit = module/xbacklight
+type = internal/backlight
+card = intel_backlight
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; CPU-info
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[module/cpu]
+type = internal/cpu
+interval = 2
+format-prefix = " "
+format-prefix-foreground = ${colors.foreground-alt}
+format-underline = #f90000
+label = %percentage%%
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; memory info
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[module/memory]
+type = internal/memory
+interval = 2
+format-prefix = " "
+format-prefix-foreground = ${colors.foreground-alt}
+format-underline = #4bffdc
+label = %percentage_used%%
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; WLAN
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[module/wlan]
+type = internal/network
+interface = wlan0
+interval = 3.0
+
+format-connected = <label-connected>
+format-connected-underline = #9f78e1
+format-disconnected-underline = ${self.format-connected-underline}
+
+;label-connected = %essid%
+label-connected = asdasdasd
+label-disconnected = %ifname% disconnected
+label-disconnected-foreground = ${colors.foreground-alt}
+
+ramp-signal-0 = 
+ramp-signal-1 = 
+ramp-signal-2 = 
+ramp-signal-3 = 
+ramp-signal-4 = 
+ramp-signal-foreground = ${colors.foreground-alt}
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Ethernet
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[module/eth]
+type = internal/network
+interface = eth0
+interval = 3.0
+
+format-connected-underline = #55aa55
+format-connected-prefix = " "
+format-connected-foreground-foreground = ${colors.foreground-alt}
+label-connected = %local_ip%
+
+format-disconnected-underline = ${self.format-connected-underline}
+label-disconnected = %ifname% disconnected
+label-disconnected-foreground = ${colors.foreground-alt}
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Date1 (Clock for the middle)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[module/date1]
+type = internal/date
+interval = 1
+;date = %A %d
+;date-alt = " %d-%m-%Y"
+
+time = %H:%M
+;time-alt = %H:%M:%S
+
+format-prefix = 
+format-prefix-foreground = ${colors.foreground-alt}
+;format-underline = #0a6cf5
+
+label = %date% %time%
+label-font = 3
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Date2 (Date in the right side)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[module/date2]
+type= internal/date
+interval = 60
+
+date = %d.%m.%Y
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Volume
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[module/volume]
+type = internal/volume
+
+format-volume = <ramp-volume> <label-volume>
+
+label-volume-foreground = ${root.foreground}
+
+ramp-volume-0 = 
+ramp-volume-1 = 
+ramp-volume-2 = 
+
+format-muted-prefix = " "
+format-muted-foreground = ${colors.foreground-alt}
+label-muted = 
+
+; If defined, it will replace <ramp-volume> when
+; headphones are plugged in to `headphone_control_numid`
+; If undefined, <ramp-volume> will be used for both
+; Only applies if <ramp-volume> is used
+ramp-headphones-0 = 
+ramp-headphones-1 = 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Battery
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[module/battery]
+type = internal/battery
+battery = BAT0
+adapter = ADP1
+full-at = 98
+
+format-charging = <animation-charging> <label-charging>
+;format-charging-underline = #ffb52a
+
+format-discharging = <ramp-capacity> <label-discharging>
+;format-discharging-underline = ${self.format-charging-underline}
+
+format-full-prefix = " "
+format-full-prefix-foreground = ${colors.foreground-alt}
+;format-full-underline = ${self.format-charging-underline}
+
+labe-discharging-font = 2
+
+ramp-capacity-font = 2
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+;ramp-capacity-foreground = ${colors.foreground-alt}
+
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+animation-charging-3 = 
+animation-charging-4 = 
+animation-charging-foreground = ${colors.foreground-alt}
+animation-charging-framerate = 500
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Temperature?
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[module/temperature]
+type = internal/temperature
+thermal-zone = 0
+warn-temperature = 60
+
+format = <ramp> <label>
+format-underline = #f50a4d
+format-warn = <ramp> <label-warn>
+format-warn-underline = ${self.format-underline}
+
+label = %temperature%
+label-warn = %temperature%
+label-warn-foreground = ${colors.secondary}
+
+ramp-0 = 
+ramp-1 = 
+ramp-2 = 
+ramp-foreground = ${colors.foreground-alt}
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Power menu
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[module/powermenu]
+type = custom/menu
+
+format-spacing = 1
+
+label-open =  
+label-open-foreground = ${colors.secondary}
+label-close =  cancel
+label-close-foreground = ${colors.secondary}
+label-separator = |
+label-separator-foreground = ${colors.foreground-alt}
+
+menu-0-0 = reboot
+menu-0-0-exec = menu-open-1
+menu-0-1 = power off
+menu-0-1-exec = menu-open-2
+
+menu-1-0 = cancel
+menu-1-0-exec = menu-open-0
+menu-1-1 = reboot
+menu-1-1-exec = sudo reboot
+
+menu-2-0 = power off
+menu-2-0-exec = sudo poweroff
+menu-2-1 = cancel
+menu-2-1-exec = menu-open-0
+
+; vim:ft=dosini
