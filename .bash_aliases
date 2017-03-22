@@ -1,1 +1,0 @@
-/home/mikko/.bash_aliases
